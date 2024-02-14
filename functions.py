@@ -10,7 +10,22 @@ def find_calories_by_ingredient(ingredient_name):
     ################################################################################################
     ### Задание 1. Напишите функцию, которая по названию продукта выводит количество калорий в нем.
     ################################################################################################
-    return 0
+    conn = sqlite3.connect('calorie_tracker.db')
+    cursor = conn.cursor()
+    query = """
+        SELECT Products.CaloriesPer100g 
+        FROM Products
+        WHERE Products.ProductName = ?
+    """
+    cursor.execute(query, (ingredient_name, ))
+    
+    ### fetchone 
+    result = cursor.fetchone()[0]
+    
+    if result:
+        return result
+    else:
+        return None
 
 
 '''
@@ -40,6 +55,19 @@ def get_ingredients_by_meal(meal_name):
         ##################################################################    
         ### Задание 2. Обработайте и верните значения в корректном формате.
         ##################################################################
+        result = cursor.fetchall()
+
+        if result:
+            res_dict = {}
+            for row in result:
+                if row[1] in res_dict.keys():
+                    res_dict[row[1]].append(row[0])
+                else:
+                    res_dict[row[1]] = [row[0]]
+            return res_dict
+        else:
+            return None
+
     finally:
         # Закрытие соединения с базой данных
         conn.close()
@@ -52,27 +80,27 @@ def get_ingredients_by_meal(meal_name):
 Иначе None. 
 '''
 def calculate_calories_for_meal(meal_name):
-    # Подключение к базе данных
-    conn = sqlite3.connect('calorie_tracker.db')  
-    cursor = conn.cursor()
+#     # Подключение к базе данных
+#     conn = sqlite3.connect('calorie_tracker.db')  
+#     cursor = conn.cursor()
 
-    try:
-        ###################################################################################
-        # Задание 3. Напишите запрос для получения общего количества калорий в блюде
-        ###################################################################################
+#     try:
+#         ###################################################################################
+#         # Задание 3. Напишите запрос для получения общего количества калорий в блюде
+#         ###################################################################################
 
-        # Выполнение запроса с параметром
-        cursor.execute(query, (meal_name,))
+#         # Выполнение запроса с параметром
+#         cursor.execute(query, (meal_name,))
 
-        # Получение результата
-        result = cursor.fetchone()
+#         # Получение результата
+#         result = cursor.fetchone()
 
-        if result:
-            return result[0]  # Возвращаем общее количество калорий в блюде
-        else:
-            return None  # Блюдо не найдено
+#         if result:
+#             return result[0]  # Возвращаем общее количество калорий в блюде
+#         else:
+#             return None  # Блюдо не найдено
 
-    finally:
-        # Закрытие соединения с базой данных
-        conn.close()
+#     finally:
+#         # Закрытие соединения с базой данных
+#         conn.close()
 

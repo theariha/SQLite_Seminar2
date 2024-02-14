@@ -6,7 +6,7 @@ cursor = conn.cursor()
 
 try:
     query = """
-        SELECT Products.ProductName
+        SELECT *
         FROM Products
     """
     cursor.execute(query)
