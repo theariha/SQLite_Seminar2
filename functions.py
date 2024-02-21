@@ -12,20 +12,24 @@ def find_calories_by_ingredient(ingredient_name):
     ################################################################################################
     conn = sqlite3.connect('calorie_tracker.db')
     cursor = conn.cursor()
-    query = """
-        SELECT Products.CaloriesPer100g 
-        FROM Products
-        WHERE Products.ProductName = ?
-    """
-    cursor.execute(query, (ingredient_name, ))
+    try:
+        query = """
+            SELECT Products.CaloriesPer100g 
+            FROM Products
+            WHERE Products.ProductName = ?
+        """
+        cursor.execute(query, (ingredient_name, ))
+        
+        ### fetchone 
+        result = cursor.fetchone()
+        
+        if result:
+            return result[0]
+        else:
+            return None
     
-    ### fetchone 
-    result = cursor.fetchone()[0]
-    
-    if result:
-        return result
-    else:
-        return None
+    finally:
+        conn.close()
 
 
 '''
@@ -88,6 +92,14 @@ def calculate_calories_for_meal(meal_name):
         ###################################################################################
         # Задание 3. Напишите запрос для получения общего количества калорий в блюде
         ###################################################################################
+
+        query = """
+            SELECT SUM(Products.CaloriesPer100g * MealComponents.Quantity / 100) 
+            FROM Meals 
+            JOIN MealComponents ON MealComponents.MealID = Meals.MealID 
+            JOIN Products ON MealComponents.ProductID = Products.ProductID
+            WHERE Meals.MealName = ?
+        """
 
         # Выполнение запроса с параметром
         cursor.execute(query, (meal_name,))
