@@ -2,6 +2,12 @@ class IngredientService:
     def __init__(self, db):
         self.db = db
 
+    '''
+    Функция для расчета калорий на 100 гр продукта.
+    На вход принимает название продукта.
+    Возращает число - количество калорий на 100гр, если продукт найден в БД.
+    Иначе None
+    '''
     def find_calories_by_ingredient(self, ingredient_name):
         query = """
             SELECT Products.CaloriesPer100g
@@ -16,6 +22,17 @@ class MealService:
     def __init__(self, db):
         self.db = db
 
+
+    '''
+    Функция для вывода ингредиентов заданного блюда.
+    На вход принимает название блюда. Или часть названия блюда.
+    Если хотя бы одно блюдо найдено в БД, возращает словарь формата: 
+    {
+        блюдо1: [ингредиент1, ингредиент2], 
+        блюдоn: [ингредиентX, ингредиентY]
+    }.
+    Иначе None.
+    '''
     def get_ingredients_by_meal(self, meal_name):
         query = """
             SELECT Products.ProductName, Meals.MealName 
@@ -37,6 +54,13 @@ class MealService:
         else:
             return None
 
+
+    '''
+    Функция для подсчета калорий во всем блюде.
+    На вход принимает название блюда полностью и проверяет только полное совпадение с названием в БД.
+    Возвращает общее количество калорий в блюде, если оно найдено в БД.
+    Иначе None. 
+    '''
     def calculate_calories_for_meal(self, meal_name):
         query = """
             SELECT SUM(Products.CaloriesPer100g * MealComponents.Quantity / 100)
