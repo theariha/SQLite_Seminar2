@@ -12,7 +12,7 @@
 
 
 ## Ожидаемый результат 
-![src\screen.gif](https://github.com/rezvaya/SQLite_Seminar2/blob/main/src/screen.gif?raw=true)
+![src\screen.gif](https://github.com/rezvaya/SQLite_Seminar2/blob/main/img/screen.gif?raw=true)
 
 
 ## План работы
