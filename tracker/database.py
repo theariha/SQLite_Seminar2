@@ -1,5 +1,7 @@
 import sqlite3
 
+
+
 class DatabaseConnection:
     def __init__(self, db_name='tracker/calorie_tracker.db'):
         self.conn = sqlite3.connect(db_name)
